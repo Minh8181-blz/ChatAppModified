@@ -1,5 +1,6 @@
 var jwt = require('jsonwebtoken');
 var config = require('../config');
+var userQueries = require('../query-service/user-queries');
 var JWT_KEY = config.JWT_KEY;
 
 var jwtservice = {};
@@ -26,7 +27,13 @@ jwtservice.getPayload = function(tokenString, callback){
 			callback(false);
 		}
 		else{
-			callback(decoded);
+			userQueries.verifyFromToken(decoded, function(result){
+				if(result.length == 1){
+					callback(decoded);
+				}else{
+					callback(false);
+				}
+			})
 		}
 	})
 }

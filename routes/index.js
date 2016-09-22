@@ -52,22 +52,5 @@ router.post('/login', function(req, res, next){
 	})
 });
 
-router.get('/users', function(req, res, next){
-	console.log(req.headers);
-	var user = {};
-	jwtService.getPayload(req.headers.authorization, function(result){
-		if(result){
-			user = result;
-
-			userQueries.getAll(user.id,function(rows){
-				return res.status(200).json({users: rows});
-			})
-		}else{
-			return res.status(401).json({message: 'Unauthorized'});
-		}
-	});
-
-	
-});
 
 module.exports = router;
